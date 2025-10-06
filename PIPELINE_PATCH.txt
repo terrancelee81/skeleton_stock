@@ -1,0 +1,20 @@
+
+--- src/forecaster/services/pipeline.py (apply these edits) ---
+
+1) Update import line near the top:
+- from ..data.sources import CSVDataSource
++ from ..data.sources import CSVDataSource
++ from ..data.yahoo import YahooDataSource
+
+2) In ForecastPipeline.__init__, replace the data source selection block with:
+
+        data_cfg = cfg.data or {}
+        src_kind = data_cfg.get("source", "csv")
+        if src_kind == "csv":
+            self.source = CSVDataSource(data_cfg.get("csv_path", "data/raw/AAPL.csv"))
+        elif src_kind == "yahoo":
+            interval = data_cfg.get("interval", "1d")
+            auto_adjust = bool(data_cfg.get("auto_adjust", False))
+            self.source = YahooDataSource(interval=interval, auto_adjust=auto_adjust)
+        else:
+            raise ValueError(f"Unknown data source: {src_kind}")
