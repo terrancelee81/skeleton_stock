@@ -1,0 +1,31 @@
+run_name: base_run
+seed: 42
+paths:
+  data_dir: data
+  artifacts_dir: artifacts
+data:
+  source: csv
+  csv_path: data/raw/AAPL.csv
+  start: "2016-01-01"
+  end: "2025-01-01"
+target:
+  column: Adj Close
+  horizon: 1
+features:
+  transforms:
+    - type: Returns
+    - type: SMA
+      params: {window: 5}
+    - type: SMA
+      params: {window: 20}
+    - type: Lag
+      params: {col: Adj Close, lags: 5}
+model:
+  kind: sklearn.random_forest
+  params:
+    n_estimators: 200
+    random_state: 42
+backtest:
+  train_size_days: 504     # ~2 years trading days
+  step_days: 20
+metrics: [MAE, RMSE, MAPE, DIR_ACC]

@@ -1,0 +1,11 @@
+# Example override: inherits intent from base if you merge them in loader
+run_name: aapl_daily_lags_rf
+data:
+  csv_path: data/raw/AAPL.csv
+  start: "2016-01-01"
+  end: "2025-01-01"
+model:
+  kind: sklearn.random_forest
+  params:
+    n_estimators: 300
+    max_depth: 8
